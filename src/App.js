@@ -1,16 +1,17 @@
 import './App.css';
 import React from 'react';
-import Board from './components/Board';
+import Board from './dnd/components/Board';
+import { DragDropContext } from 'react-beautiful-dnd';
+
 
 
 function App() {
   return (
-<div>
 
-  
-  <Board/>
 
-</div>
+      <div>
+        <Board />
+      </div>
   );
 }
 
