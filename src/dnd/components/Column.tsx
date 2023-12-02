@@ -52,15 +52,16 @@ const Header = styled.divBox`
 
 // background-color: ${(isDragging:boolean ) =>
 //     isDragging ? #f4f5f7 : #7668c5};
-export default function Column({ draggableId, title, index }: IColumn) {
-  const cards: Array<ICardData> = useSelector(
-    (state: RootState) => state.cards.data
-  );
+export default function Column({ draggableId, title, cards, index }: IColumn) {
+  // const cards: Array<ICardData> = useSelector(
+  //   (state: RootState) => state.cards.data
+  // );
 
-  const getCards = (draggableId: DraggableId): Array<ICardData> => {
-    return cards.filter((card) => card.columnId === draggableId);
-  };
-
+  // const getCards = (draggableId: DraggableId): Array<ICardData> => {
+  //   return cards.filter((card) => card.columnId === draggableId);
+  // };
+  
+  console.log(title + JSON.stringify(cards));
   return (
     <Draggable draggableId={draggableId} index={index}>
       {(provided, snapshot) => (
@@ -69,10 +70,10 @@ export default function Column({ draggableId, title, index }: IColumn) {
           {...provided.draggableProps}
           {...provided.dragHandleProps}
         >
-          <Header isDragging={snapshot.isDragging}>
-            <Title isDragging={snapshot.isDragging}>{title}</Title>
+          <Header>
+            <Title>{title}</Title>
           </Header>
-          <CardList cards={getCards(draggableId)} />
+          <CardList cards={cards} />
         </Container>
       )}
     </Draggable>

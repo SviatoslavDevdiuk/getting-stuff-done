@@ -15,13 +15,11 @@ interface ICard {
   index: number;
 }
 
-const Container = styled.divBox<{ isDragging: boolean }>`
+const Container = styled.divBox`
   border-radius: 2px;
   border: 2px solid transparent;
   padding: 2px;
   margin-bottom: 2px;
-  background-color: ${(props: any) =>
-    props.isDragging ? "lightblue" : "white"};
 `;
 const Content = styled.divBox`
   flex-grow: 1;
@@ -30,9 +28,9 @@ const Content = styled.divBox`
   flex-direction: column;
 `;
 
-const changeBackgroundColor = (props: any) => {
-  return props.isDragging ? "lightblue" : "white";
-};
+// const changeBackgroundColor = (props: any) => {
+//   return props.isDragging ? "lightblue" : "white";
+// };
 
 function getStyle(provided: any, style: any) {
   if (!style) {
@@ -45,17 +43,17 @@ function getStyle(provided: any, style: any) {
   };
 }
 
-const Card: React.FC<ICard> = ({ data, index }) => {
+const Card: React.FC<ICard> = ({ data, index}) => {
+  console.log("index: ", index);
   return (
     <Draggable key={data.id} draggableId={data.id} index={index}>
       {(dragProvided, dragSnapshot) => (
         <Container
           ref={dragProvided.innerRef}
-          isDragging={dragSnapshot.isDragging}
           {...dragProvided.draggableProps}
           {...dragProvided.dragHandleProps}
         >
-          <Content isDragging={dragSnapshot.isDragging}>{data.title}</Content>
+          <Content>{data.title}</Content>
         </Container>
       )}
     </Draggable>

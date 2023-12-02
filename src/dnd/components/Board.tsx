@@ -4,33 +4,44 @@ import Column from "./Column";
 import { RootState } from "../../redux/store";
 import { useSelector } from "react-redux";
 import styled from "@xstyled/styled-components";
-import { IColumn } from "../../redux/slices/columnsSlice";
+import { IColumn, setCardsToColumns } from "../../redux/slices/columnsSlice";
 import { useDispatch } from "react-redux";
 import { moveCard } from "../../redux/slices/cardsSlice";
+import { ICardData } from "./Card";
 
 export default function Board() {
   const columns: Array<IColumn> = useSelector(
     (state: RootState) => state.columns.columns
   );
+
+  const cards: Array<ICardData> = useSelector(
+    (state: RootState) => state.cards.data
+  );
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setCardsToColumns(cards));
+  }, []);
 
   const handleDragEnd = (result: any) => {
     console.log("result:", result);
     const { source, destination } = result;
 
-    if (
-      !result.destination ||
-      (source.droppableId === destination.droppableId &&
-        source.index === destination.index)
-    ) {
+    if (!result.destination) {
       return;
     }
 
     dispatch(
       moveCard({
-        sourceIndex: source.index,
-        destinationIndex: destination.index,
-      })
+        source: {
+          droppableId: result.source.droppableId,
+          index: result.source.index,
+        },
+        destination: {
+          droppableId: result.destination.droppableId,
+          index: result.destination.index,
+        },
+      }) as any
     );
   };
 
@@ -42,8 +53,6 @@ export default function Board() {
     background-color: ${(props: any) =>
       props.isDraggingOver ? "#E6FCFF" : "transparent"};
   `;
-
-  // const removeTask
 
   return (
     <div>
@@ -61,6 +70,7 @@ export default function Board() {
                   key={column.draggableId}
                   draggableId={column.draggableId}
                   title={column.title}
+                  cards={column.cards}
                   index={column.index}
                 />
               ))}

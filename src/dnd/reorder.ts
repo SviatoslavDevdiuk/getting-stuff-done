@@ -3,7 +3,7 @@ export const reorder = (
   startIndex: number,
   endIndex: number
 ) => {
-  const clonedList = structuredClone(list);
+  const clonedList = {...list};
   const [removedElement] = clonedList.splice(startIndex, 1);
   clonedList.splice(endIndex, 0, removedElement);
   return clonedList;
@@ -11,9 +11,9 @@ export const reorder = (
 
 //for moving cards & columns
 export const reorderBoard = (lists: any, source: any, destination: any) => {
-  const clonneedLists = structuredClone(lists);
-  const current = structuredClone(lists[source.droppableId]);
-  const next = structuredClone(lists[destination.droppableId]);
+  const clonneedLists = {...lists};
+  const current = {...lists[source.droppableId]};
+  const next = {...lists[destination.droppableId]};
   const targetElement = current[source.index];
 
   if (source.droppableId === destination.droppableId) {
