@@ -1,35 +1,39 @@
 import React, { useState } from "react";
 import { Draggable, DraggableId } from "react-beautiful-dnd";
 import styled, { color } from "@xstyled/styled-components";
-import "./column.css";
-import { useDispatch, useSelector } from "react-redux";
-import Card, { ICardData } from "./Card";
-import { IColumn } from "../../redux/slices/columnsSlice";
 import CardList from "./CardList";
-import { RootState } from "../../redux/store";
+import { ICardData } from "./Card";
+
+export interface IColumnData {
+  title: string;
+  draggableId: DraggableId;
+  cards: Array<ICardData>;
+}
+
+export interface IColumn {
+  data: IColumnData;
+  index: number;
+}
 
 const Container = styled.divBox`
-  background-color: #f4f5f7;
-  border-radius: 2.5 px;
-  width: 300px;
-  height: 475px;
+  background-color: #ebecf0;
+  border-radius: 8px;
+  border: 2px solid #ccc;
+  margin-bottom: 8px;
   overflow-y: scroll;
   -ms-overflow-style: none;
   scrollbar-width: none;
-  border: 1px solid gray;
-`;
+  padding: 8px;
+  width: 300px;
+  height: 475px;
 
-const TaskList = styled.divBox`
-  padding: 3px;
-  transition: background-color 0.2s ease;
-  background-color: #f4f5f7;
-  flex-grow: 1;
-  min-height: 100px;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const Title = styled.divBox`
   padding: 8px;
-  transition: background-color ease 0.2s;
   flex-grow: 1;
   position: relative;
   &:focus {
@@ -41,29 +45,34 @@ const Title = styled.divBox`
 const Header = styled.divBox`
   display: flex;
   align-items: center;
-  justify-content: center;
-  border-top-left-radius: 2px;
-  border-top-right-radius: 2px;
-  transition: background-color 0.2s ease;
+  justify-content: space-between;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  background-color: #61bd4f; /* Trello green color */
+  color: #fff;
+  padding: 8px;
   &:hover {
-    background-color: #7668c5;
+    background-color: #4a8f29; /* Darker green on hover */
   }
 `;
 
-// background-color: ${(isDragging:boolean ) =>
-//     isDragging ? #f4f5f7 : #7668c5};
-export default function Column({ draggableId, title, cards, index }: IColumn) {
-  // const cards: Array<ICardData> = useSelector(
-  //   (state: RootState) => state.cards.data
-  // );
+const AddCardButton = styled.buttonBox`
+  background-color: #5aac44; /* Trello green color for the button */
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 8px;
+  cursor: pointer;
+`;
 
-  // const getCards = (draggableId: DraggableId): Array<ICardData> => {
-  //   return cards.filter((card) => card.columnId === draggableId);
-  // };
-  
-  console.log(title + JSON.stringify(cards));
+const Column: React.FC<IColumn> = ({ data, index }) => {
+  console.log("column data : ", data);
   return (
-    <Draggable draggableId={draggableId} index={index}>
+    <Draggable
+      key={data.draggableId}
+      draggableId={data.draggableId}
+      index={index}
+    >
       {(provided, snapshot) => (
         <Container
           ref={provided.innerRef}
@@ -71,11 +80,15 @@ export default function Column({ draggableId, title, cards, index }: IColumn) {
           {...provided.dragHandleProps}
         >
           <Header>
-            <Title>{title}</Title>
+            <Title>{data.title}</Title>
+            <AddCardButton>+ Add a Card</AddCardButton>
           </Header>
-          <CardList cards={cards} />
+
+          <CardList droppableId={data.draggableId} cards={data.cards} />
         </Container>
       )}
     </Draggable>
   );
-}
+};
+
+export default Column;

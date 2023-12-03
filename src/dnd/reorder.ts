@@ -1,35 +1,57 @@
+import { IColumn } from "../redux/slices/columnsSlice";
+import { ICardData } from "./components/Card";
+
 export const reorder = (
-  list: Array<any>,
+  list: IColumn,
   startIndex: number,
   endIndex: number
 ) => {
-  const clonedList = {...list};
-  const [removedElement] = clonedList.splice(startIndex, 1);
-  clonedList.splice(endIndex, 0, removedElement);
+  const clonedList = structuredClone(list);
+  const removedElement = clonedList.cards.splice(startIndex, 1)[0];
+  clonedList.cards.splice(endIndex, 0, removedElement);
   return clonedList;
 };
 
 //for moving cards & columns
-export const reorderBoard = (lists: any, source: any, destination: any) => {
-  const clonneedLists = {...lists};
-  const current = {...lists[source.droppableId]};
-  const next = {...lists[destination.droppableId]};
-  const targetElement = current[source.index];
+export const reorderBoard = (
+  lists: Array<IColumn>,
+  source: any,
+  destination: any
+) => {
+  const clonedLists: Array<IColumn> = structuredClone(lists);
+  const { droppableId: sourceDroppableId, index: sourceIndex } = source;
+  const { droppableId: destDroppableId, index: destIndex } = destination;
 
-  if (source.droppableId === destination.droppableId) {
-    const reorderedList = reorder(current, source.index, destination.index);
-    const result = { clonneedLists, [source.index]: reorderedList };
-    return { lists: result };
+  const sourceListIndex = clonedLists.findIndex(
+    (column) => column.draggableId == sourceDroppableId
+  );
+
+  if (sourceDroppableId === destDroppableId) {
+    // Reordering within the same list
+    if(sourceDroppableId === "board"){
+      const movedColumn: IColumn  = clonedLists.splice(sourceIndex, 1)[0];
+      clonedLists.splice(destIndex, 0, movedColumn);
+      return clonedLists;
+    }
+    const updatedList = reorder(
+      clonedLists[sourceListIndex],
+      sourceIndex,
+      destIndex
+    );
+    clonedLists[sourceListIndex] = updatedList;
+   return clonedLists;
+  } else {
+    // Moving between lists
+    const destListIndex = clonedLists.findIndex(
+      (column) => column.draggableId == destDroppableId
+    );
+
+    const sourceList = clonedLists[sourceListIndex];
+    const destList = clonedLists[destListIndex];
+    const movedElement: ICardData = sourceList.cards.splice(sourceIndex, 1)[0];
+    movedElement.columnId = destDroppableId;
+    destList.cards.splice(destIndex, 0, movedElement);
+
+    return clonedLists;
   }
-
-  current.splice(source.index, 1);
-  next.splice(destination.index, 0, targetElement);
-
-  const result = {
-    clonneedLists,
-    [source.droppableId]: current,
-    [destination.draggableId]: next,
-  };
-
-  return { lists: result };
 };

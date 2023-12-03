@@ -1,7 +1,7 @@
 import React, { RefObject } from "react";
-import "./card.css";
 import { Draggable, DraggableId } from "react-beautiful-dnd";
 import styled from "@xstyled/styled-components";
+import { css } from "styled-components";
 
 export interface ICardData {
   id: string;
@@ -16,21 +16,39 @@ interface ICard {
 }
 
 const Container = styled.divBox`
-  border-radius: 2px;
-  border: 2px solid transparent;
-  padding: 2px;
-  margin-bottom: 2px;
-`;
-const Content = styled.divBox`
-  flex-grow: 1;
-  flex-basis: 100%;
-  display: flex;
-  flex-direction: column;
+  box-align: center;
+  background-color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 1px 0 rgba(9, 30, 66, 0.25);
+  cursor: pointer;
+  margin-bottom: 8px;
+  padding: 8px;
+  width: 100%;
+
+  ${(props: any) =>
+    props.isDragging &&
+    css`
+      box-shadow: 0 0 3px green;
+      background-color: #f4f5f7;
+      transform: scale(1.03);
+    `}
+
+  &:hover {
+    ${(props: any) =>
+      !props.isDragging &&
+      css`
+        box-shadow: 0 0 3px green;
+        background-color: #f4f5f7;
+        transform: scale(1.03);
+      `}
+  }
 `;
 
-// const changeBackgroundColor = (props: any) => {
-//   return props.isDragging ? "lightblue" : "white";
-// };
+const Content = styled.divBox`
+  color: #000100;
+  font-size: 15px;
+  line-height: 20px;
+`;
 
 function getStyle(provided: any, style: any) {
   if (!style) {
@@ -43,8 +61,7 @@ function getStyle(provided: any, style: any) {
   };
 }
 
-const Card: React.FC<ICard> = ({ data, index}) => {
-  console.log("index: ", index);
+const Card: React.FC<ICard> = ({ data, index }) => {
   return (
     <Draggable key={data.id} draggableId={data.id} index={index}>
       {(dragProvided, dragSnapshot) => (
@@ -52,6 +69,7 @@ const Card: React.FC<ICard> = ({ data, index}) => {
           ref={dragProvided.innerRef}
           {...dragProvided.draggableProps}
           {...dragProvided.dragHandleProps}
+          isDragging={dragSnapshot.isDragging}
         >
           <Content>{data.title}</Content>
         </Container>

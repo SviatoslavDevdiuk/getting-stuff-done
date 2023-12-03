@@ -1,16 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import Column from "./Column";
+import Column, { IColumn, IColumnData } from "./Column";
 import { RootState } from "../../redux/store";
 import { useSelector } from "react-redux";
 import styled from "@xstyled/styled-components";
-import { IColumn, setCardsToColumns } from "../../redux/slices/columnsSlice";
+import { setCardsToColumns } from "../../redux/slices/columnsSlice";
 import { useDispatch } from "react-redux";
-import { moveCard } from "../../redux/slices/cardsSlice";
+import { moveElement } from "../../redux/slices/cardsSlice";
 import { ICardData } from "./Card";
 
+const ColumnWrapper = styled.divBox`
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  justify-content: space-evenly;
+`;
+
 export default function Board() {
-  const columns: Array<IColumn> = useSelector(
+  const columns: Array<IColumnData> = useSelector(
     (state: RootState) => state.columns.columns
   );
 
@@ -23,8 +30,11 @@ export default function Board() {
     dispatch(setCardsToColumns(cards));
   }, []);
 
+  useEffect(() => {
+    console.log("columns: ", columns);
+  }, [columns]);
+
   const handleDragEnd = (result: any) => {
-    console.log("result:", result);
     const { source, destination } = result;
 
     if (!result.destination) {
@@ -32,49 +42,33 @@ export default function Board() {
     }
 
     dispatch(
-      moveCard({
-        source: {
-          droppableId: result.source.droppableId,
-          index: result.source.index,
-        },
-        destination: {
-          droppableId: result.destination.droppableId,
-          index: result.destination.index,
-        },
+      moveElement({
+        source: source,
+        destination: destination,
       }) as any
     );
   };
 
-  const ColumnWrapper = styled.divBox`
-    display: flex;
-    gap: 10px;
-    padding: 10px;
-    justify-content: space-evenly;
-    background-color: ${(props: any) =>
-      props.isDraggingOver ? "#E6FCFF" : "transparent"};
-  `;
-
+  console.log("columns: ", columns);
   return (
     <div>
       <h1>Getting Stuff Done</h1>
 
       <DragDropContext onDragEnd={handleDragEnd}>
-        <Droppable key="board" droppableId="board">
+        <Droppable
+          type="column"
+          direction="horizontal"
+          key="board"
+          droppableId="board"
+        >
           {(dropProvided, dropSnapshot) => (
             <ColumnWrapper
               ref={dropProvided.innerRef}
               {...dropProvided.droppableProps}
             >
-              {columns.map((column) => (
-                <Column
-                  key={column.draggableId}
-                  draggableId={column.draggableId}
-                  title={column.title}
-                  cards={column.cards}
-                  index={column.index}
-                />
+              {columns.map((data: IColumnData, index: number) => (
+                <Column data={data} index={index} />
               ))}
-              {dropProvided.placeholder}
             </ColumnWrapper>
           )}
         </Droppable>

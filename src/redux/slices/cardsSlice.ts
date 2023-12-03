@@ -1,18 +1,13 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { mockCardData } from "../../dnd/mockData";
 import { ICardData } from "../../dnd/components/Card";
 import { RootState } from "../store";
 import { reorderBoard } from "../../dnd/reorder";
-import { setColumns } from "./columnsSlice";
+import { setCardsToColumns, setColumns } from "./columnsSlice";
 
 interface Cards {
   data: Array<ICardData>;
 }
-
-// interface MoveCardPayload {
-//   sourceIndex: number;
-//   destinationIndex: number;
-// }
 
 const CREATE_CARD = "cards/createCard";
 const MOVE_CARD = "cards/moveCard";
@@ -22,15 +17,20 @@ const initialState: Cards = {
   data: [...mockCardData],
 };
 
-export const moveCard = createAsyncThunk(
+export const moveElement = createAsyncThunk(
   MOVE_CARD,
   async (payload: any, { getState, dispatch }) => {
+    console.log("move card payload: ", payload);
     const state = getState() as RootState;
 
-    const {source, destination} = payload;
-    const updatedColumns = reorderBoard(state.columns, source, destination).lists;
-
-    dispatch(setColumns(updatedColumns));
+    const { source, destination } = payload;
+    const reorderedColumns = reorderBoard(
+      state.columns.columns,
+      source,
+      destination
+    );
+    console.log("updated columns: ", reorderedColumns);
+    dispatch(setColumns(reorderedColumns));
   }
 );
 
@@ -49,9 +49,9 @@ const cardSlice = createSlice({
 
       console.log("create card is clicked");
 
-      // const newCard: ICardData = { id: `card-${Date.now()}`, title: title }
-      //it's not mutating state actually, the "immer" library is used under the hood
-      // state.data.push(newCard);
+      const newCard: ICardData = { id: `card-${Date.now()}`, title: title, columnId: droppableId }
+     // it's not mutating state actually, the "immer" library is used under the hood
+      state.data.push(newCard);
     },
     // moveCard(state, action) {
     //   console.log("moveCard: ", action.payload);
@@ -59,11 +59,10 @@ const cardSlice = createSlice({
     //   const [removedCard] = state.data.splice(sourceIndex, 1);
     //   state.data.splice(destinationIndex, 0, removedCard);
     // },
-  }, extraReducers: (builder) =>{
-    builder.addCase(moveCard.fulfilled, (state, action)=>{
-        
-    })
-  }
+  },
+  extraReducers: (builder) => {
+    builder.addCase(moveElement.fulfilled, (state, action) => {});
+  },
 });
 
 export const { createCard } = cardSlice.actions;

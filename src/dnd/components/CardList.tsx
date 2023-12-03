@@ -1,18 +1,12 @@
 import React, { RefObject, forwardRef } from "react";
-import { Droppable, Draggable } from "react-beautiful-dnd";
+import { Droppable, DroppableId } from "react-beautiful-dnd";
 import styled from "@xstyled/styled-components";
 import Card, { ICardData } from "./Card";
 
 export interface ICardsList {
   cards: Array<ICardData>;
+  droppableId: DroppableId;
 }
-
-// export const getBackgroundColor = (
-//   isDraggingOver: boolean,
-//   isDraggingFrom: boolean
-// ) => {
-//   return isDraggingOver ? "#FFEBE6" : isDraggingFrom ? "#E6FCFF" : "#EBECF0";
-// };
 
 const InnerCardList: React.FC<ICardsList> = React.memo(function InnerCardList({
   cards,
@@ -28,19 +22,19 @@ const Wrapper = styled.divBox`
   padding: 2px;
   border: 2px;
   padding-bottom: 0;
-  transition: background-color 0.2s ease;
   width: 250px;
 `;
 
 const CardList: React.FC<ICardsList> = (props) => {
   return (
-    <Droppable droppableId={"LIST"} ignoreContainerClipping={true}>
+    <Droppable
+      type="sub"
+      droppableId={props.droppableId}
+      ignoreContainerClipping={true}
+    >
       {(dropProvided, dropSnapshot) => (
-        <Wrapper
-          ref={dropProvided.innerRef}
-          {...dropProvided.droppableProps}
-        >
-          <InnerCardList cards={props.cards} />
+        <Wrapper ref={dropProvided.innerRef} {...dropProvided.droppableProps}>
+          <InnerCardList droppableId={props.droppableId} cards={props.cards} />
           {dropProvided.placeholder}
         </Wrapper>
       )}
