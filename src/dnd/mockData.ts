@@ -1,0 +1,148 @@
+import { ICardData } from "./components/Card";
+
+export const mockCardData: Array<ICardData> = [
+  {
+    id: "card1",
+    title: "Fix Login Bug",
+    content: "Resolve login issue.",
+    columnId: "1",
+  },
+  {
+    id: "card2",
+    title: "Implement Authentication",
+    content: "Add user authentication.",
+    columnId: "1",
+  },
+  {
+    id: "card3",
+    title: "Optimize Database Performance",
+    content: "Enhance database query efficiency.",
+    columnId: "1",
+  },
+   {
+     id: "card4",
+     title: "Create API Guide",
+     content: "Generate comprehensive API documentation.",
+     columnId: "1",
+   },
+   {
+     id: "card5",
+     title: "Design Dashboard Interface",
+     content: "Create visually appealing dashboard UI.",
+     columnId: "1",
+   },
+   {
+     id: "card6",
+     title: "Conduct Performance Testing",
+     content: "Test application for optimal performance.",
+     columnId: "1",
+   },
+   {
+     id: "card7",
+     title: "Enhance Code Readability",
+     content: "Refactor code for better readability.",
+     columnId: "1",
+   },
+   {
+     id: "card8",
+     title: "Deploy to Production",
+     content: "Prepare and deploy application to production.",
+     columnId: "1",
+   },
+  {
+    id: "card9",
+    title: "Perform Security Audit",
+    content: "Conduct security audit to identify vulnerabilities.",
+    columnId: "2",
+  },
+  {
+    id: "card10",
+    title: "Analyze User Feedback",
+    content: "Collect and analyze user feedback for improvements.",
+    columnId: "2",
+  },
+  {
+    id: "card11",
+    title: "Implement Two-Factor Auth",
+    content: "Enhance security with two-factor authentication.",
+    columnId: "2",
+  },
+   {
+     id: "card12",
+     title: "Set Up Database Backups",
+     content: "Implement regular backups for database.",
+     columnId: "2",
+   },
+   {
+     id: "card13",
+     title: "Organize UI/UX Workshop",
+     content: "Plan and execute workshop for UI/UX design improvement.",
+     columnId: "2",
+   },
+   {
+     id: "card14",
+     title: "Optimize Performance",
+     content: "Identify and optimize application performance bottlenecks.",
+     columnId: "2",
+   },
+   {
+     id: "card15",
+     title: "Conduct Code Review",
+     content: "Organize team code review session for quality assurance.",
+     columnId: "2",
+   },
+   {
+     id: "card16",
+     title: "Prepare Release Notes",
+     content: "Create detailed release notes for upcoming software release.",
+     columnId: "2",
+   },
+  {
+    id: "card17",
+    title: "Security Assessment",
+    content: "Conduct thorough security assessment.",
+    columnId: "3",
+  },
+  {
+    id: "card18",
+    title: "Evaluate User Feedback",
+    content: "Evaluate and derive insights from user feedback.",
+    columnId: "3",
+  },
+  {
+    id: "card19",
+    title: "Enhance Authentication",
+    content: "Improve authentication mechanisms.",
+    columnId: "3",
+  },
+   {
+     id: "card20",
+     title: "Implement Backup Strategy",
+     content: "Implement strategy for regular database backups.",
+     columnId: "3",
+   },
+   {
+     id: "card21",
+     title: "UI/UX Design Session",
+     content: "Organize session for UI/UX design enhancement.",
+     columnId: "3",
+   },
+   {
+     id: "card22",
+     title: "Optimize Application Performance",
+     content: "Identify and optimize performance bottlenecks.",
+     columnId: "3",
+   },
+   {
+     id: "card23",
+     title: "Team Code Review",
+     content: "Conduct team code review session for quality improvement.",
+     columnId: "3",
+   },
+   {
+     id: "card24",
+     title: "Release Notes Compilation",
+     content: "Compile detailed release notes for software release.",
+     columnId: "3",
+   },
+] as Array<ICardData>;
