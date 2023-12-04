@@ -1,10 +1,6 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { ICardData } from "../../dnd/components/Card";
-import { RootState } from "../store";
-import { DraggableId } from "react-beautiful-dnd";
-import {  IColumnData } from "../../dnd/components/Column";
-
-
+import { IColumnData } from "../../dnd/components/Column";
 
 interface Columns {
   columns: Array<IColumnData>;
@@ -12,9 +8,9 @@ interface Columns {
 
 const initialState: Columns = {
   columns: [
-    { title: "Mailbox", draggableId: "1", cards: []},
-    { title: "In Progress", draggableId: "2", cards: []},
-    { title: "Done", draggableId: "3", cards: []},
+    { title: "Mailbox", draggableId: "1", cards: [] },
+    { title: "In Progress", draggableId: "2", cards: [] },
+    { title: "Done", draggableId: "3", cards: [] },
   ],
 };
 
@@ -23,7 +19,6 @@ const columnsSlice = createSlice({
   initialState,
   reducers: {
     setColumns: (state, action) => {
-      console.log(action.payload);
       state.columns = action.payload;
     },
     setCardsToColumns: (state, action) => {
@@ -34,7 +29,6 @@ const columnsSlice = createSlice({
         return { ...column, cards: columnCards };
       });
 
-      // Create a new state object with the updated columns
       return { ...state, columns: updatedColumns };
     },
   },

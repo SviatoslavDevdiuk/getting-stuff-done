@@ -28,11 +28,9 @@ export default function Board() {
 
   useEffect(() => {
     dispatch(setCardsToColumns(cards));
-  }, []);
+  }, [cards]);
 
-  useEffect(() => {
-    console.log("columns: ", columns);
-  }, [columns]);
+  useEffect(() => {}, [columns]);
 
   const handleDragEnd = (result: any) => {
     const { source, destination } = result;
@@ -49,7 +47,6 @@ export default function Board() {
     );
   };
 
-  console.log("columns: ", columns);
   return (
     <div>
       <h1>Getting Stuff Done</h1>
@@ -69,6 +66,7 @@ export default function Board() {
               {columns.map((data: IColumnData, index: number) => (
                 <Column data={data} index={index} />
               ))}
+              {dropProvided.placeholder}
             </ColumnWrapper>
           )}
         </Droppable>

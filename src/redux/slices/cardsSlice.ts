@@ -3,7 +3,7 @@ import { mockCardData } from "../../dnd/mockData";
 import { ICardData } from "../../dnd/components/Card";
 import { RootState } from "../store";
 import { reorderBoard } from "../../dnd/reorder";
-import { setCardsToColumns, setColumns } from "./columnsSlice";
+import { setColumns } from "./columnsSlice";
 
 interface Cards {
   data: Array<ICardData>;
@@ -20,7 +20,6 @@ const initialState: Cards = {
 export const moveElement = createAsyncThunk(
   MOVE_CARD,
   async (payload: any, { getState, dispatch }) => {
-    console.log("move card payload: ", payload);
     const state = getState() as RootState;
 
     const { source, destination } = payload;
@@ -29,7 +28,6 @@ export const moveElement = createAsyncThunk(
       source,
       destination
     );
-    console.log("updated columns: ", reorderedColumns);
     dispatch(setColumns(reorderedColumns));
   }
 );
@@ -45,26 +43,29 @@ const cardSlice = createSlice({
   initialState,
   reducers: {
     createCard(state, action) {
-      const { droppableId, content: title } = action.payload;
+      const { droppableId, title } = action.payload;
 
-      console.log("create card is clicked");
-
-      const newCard: ICardData = { id: `card-${Date.now()}`, title: title, columnId: droppableId }
-     // it's not mutating state actually, the "immer" library is used under the hood
-      state.data.push(newCard);
+      const newCard: ICardData = {
+        id: `card-${Date.now()}`,
+        title: title,
+        columnId: droppableId,
+      };
+      // it's not mutating state actually, the "immer" library is used under the hood
+      state.data.splice(0, 0, newCard);
     },
-    // moveCard(state, action) {
-    //   console.log("moveCard: ", action.payload);
-    //   const { sourceIndex, destinationIndex } = action.payload;
-    //   const [removedCard] = state.data.splice(sourceIndex, 1);
-    //   state.data.splice(destinationIndex, 0, removedCard);
-    // },
+    editCard(state, action) {
+      const { title, id } = action.payload;
+      const targetCard = state.data.filter((card) => {
+        return card.id === id;
+      })[0];
+      targetCard.title = title;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(moveElement.fulfilled, (state, action) => {});
   },
 });
 
-export const { createCard } = cardSlice.actions;
+export const { createCard, editCard } = cardSlice.actions;
 
 export default cardSlice.reducer;

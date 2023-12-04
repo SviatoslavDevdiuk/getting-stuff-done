@@ -1,4 +1,4 @@
-import React, { RefObject, forwardRef } from "react";
+import React  from "react";
 import { Droppable, DroppableId } from "react-beautiful-dnd";
 import styled from "@xstyled/styled-components";
 import Card, { ICardData } from "./Card";
