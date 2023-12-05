@@ -51,14 +51,26 @@ const cardSlice = createSlice({
         columnId: droppableId,
       };
       // it's not mutating state actually, the "immer" library is used under the hood
-      state.data.splice(0, 0, newCard);
+      state.data.push(newCard);
     },
     editCard(state, action) {
       const { title, id } = action.payload;
+      console.log("edit card: ", action.payload);
       const targetCard = state.data.filter((card) => {
         return card.id === id;
       })[0];
+      console.log("target card: ", JSON.stringify(targetCard));
       targetCard.title = title;
+    },
+    deleteCard(state, action) {
+      const { id } = action.payload;
+      console.log("id: ", id);
+      console.log(JSON.stringify(state.data));
+      const indexOfCardToRemove = state.data.findIndex((card) => {
+        return card.id === id;
+      });
+      console.log("index to remove: ", indexOfCardToRemove);
+      state.data.splice(indexOfCardToRemove, 1);
     },
   },
   extraReducers: (builder) => {
@@ -66,6 +78,6 @@ const cardSlice = createSlice({
   },
 });
 
-export const { createCard, editCard } = cardSlice.actions;
+export const { createCard, editCard, deleteCard } = cardSlice.actions;
 
 export default cardSlice.reducer;

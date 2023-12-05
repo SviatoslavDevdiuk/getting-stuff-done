@@ -3,7 +3,8 @@ import { Draggable, DraggableId } from "react-beautiful-dnd";
 import styled from "@xstyled/styled-components";
 import { css } from "styled-components";
 import pencilButton from "../../svg/pencil-button.svg";
-import { editCard } from "../../redux/slices/cardsSlice";
+import deleteButton from "../../svg/delete-button.svg";
+import { deleteCard, editCard } from "../../redux/slices/cardsSlice";
 import { useDispatch } from "react-redux";
 
 export interface ICardData {
@@ -24,9 +25,27 @@ const PencilIcon = styled.imgBox`
   font-weight: bold;
   position: absolute;
   top: 50%;
-  right: 8px;
+  right: 10%;
   transform: translateY(-50%);
   opacity: 0;
+`;
+
+const RemoveIcon = styled.imgBox`
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  transform: translateY(-50%);
+  top: 50%;
+  right: 2%;
+  opacity: 0;
+`;
+
+const Content = styled.divBox`
+  color: #000100;
+  font-size: 15px;
+  line-height: 20px;
+  width: 85%;
+  padding-left: 5%;
 `;
 
 const Container = styled.divBox`
@@ -37,7 +56,7 @@ const Container = styled.divBox`
   cursor: pointer;
   margin-bottom: 8px;
   padding: 8px;
-  width: 100%;
+  width: 112%;
 
   ${(props: any) =>
     props.isDragging &&
@@ -57,18 +76,19 @@ const Container = styled.divBox`
       css`
         box-shadow: 0 0 3px green;
         background-color: #f4f5f7;
-        transform: scale(1.03);
+        transform: scale(1.05);
       `}
     ${PencilIcon} {
       opacity: 1;
     }
-  }
-`;
 
-const Content = styled.divBox`
-  color: #000100;
-  font-size: 15px;
-  line-height: 20px;
+    ${RemoveIcon} {
+      opacity: 1;
+    }
+    ${Content} {
+      padding-left: 0;
+    }
+  }
 `;
 
 const Input = styled.inputBox`
@@ -88,7 +108,7 @@ const Card: React.FC<ICard> = ({ data, index }) => {
 
   const dispatch = useDispatch();
 
-  const handlePencilClick = (value: string) => {
+  const handleEditClick = (value: string) => {
     setPencilClicked(!pencilClicked);
     setInputValue(value);
   };
@@ -98,13 +118,20 @@ const Card: React.FC<ICard> = ({ data, index }) => {
   };
 
   const handleCardTitleChange = () => {
+    console.log("input Value");
     dispatch(editCard({ title: inputValue, id: data.id }));
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
+      console.log("enter down");
       handleCardTitleChange();
+      setPencilClicked(!pencilClicked);
     }
+  };
+
+  const handleCardDelete = () => {
+    dispatch(deleteCard({ id: data.id }));
   };
 
   return (
@@ -115,6 +142,7 @@ const Card: React.FC<ICard> = ({ data, index }) => {
           {...dragProvided.draggableProps}
           {...dragProvided.dragHandleProps}
           isDragging={dragSnapshot.isDragging}
+          onClick={() => handleEditClick(data.title)}
         >
           {pencilClicked ? (
             <Content>{data.title}</Content>
@@ -130,8 +158,13 @@ const Card: React.FC<ICard> = ({ data, index }) => {
             src={pencilButton}
             alt="Pencil Icon"
             onClick={() => {
-              handlePencilClick(data.title);
+              handleEditClick(data.title);
             }}
+          />
+          <RemoveIcon
+            src={deleteButton}
+            alt="Delete Icon"
+            onClick={handleCardDelete}
           />
         </Container>
       )}

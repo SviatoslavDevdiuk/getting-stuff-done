@@ -50,6 +50,7 @@ export const reorderBoard = (
     const destList = clonedLists[destListIndex];
     const movedElement: ICardData = sourceList.cards.splice(sourceIndex, 1)[0];
     movedElement.columnId = destDroppableId;
+    console.log("card column ID: ", JSON.stringify(movedElement));
     destList.cards.splice(destIndex, 0, movedElement);
 
     return clonedLists;

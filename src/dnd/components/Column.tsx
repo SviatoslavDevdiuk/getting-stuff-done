@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Draggable, DraggableId } from "react-beautiful-dnd";
-import styled, { color } from "@xstyled/styled-components";
+import styled from "@xstyled/styled-components";
 import CardList from "./CardList";
-import Card, { ICardData } from "./Card";
+import { ICardData } from "./Card";
 import { useDispatch } from "react-redux";
 import { createCard } from "../../redux/slices/cardsSlice";
 
@@ -27,7 +27,7 @@ const Container = styled.divBox`
   scrollbar-width: none;
   padding: 8px;
   width: 300px;
-  height: 475px;
+  height: fit-content;
 
   &::-webkit-scrollbar {
     display: none;
@@ -50,19 +50,20 @@ const Header = styled.divBox`
   justify-content: space-between;
   border-radius: 8px;
   margin-bottom: 15px;
-  background-color: #61bd4f; /* Trello green color */
+  background-color: #61bd4f;
   color: #fff;
   padding: 8px;
   &:hover {
-    background-color: #4a8f29; /* Darker green on hover */
+    background-color: #4a8f29;
   }
 `;
 
 const AddCardButton = styled.buttonBox`
-  background-color: #5aac44; /* Trello green color for the button */
+  background-color: #5aac44;
   color: #fff;
   border: none;
   border-radius: 4px;
+  margin-left: 1%;
   padding: 8px;
   cursor: pointer;
 `;
@@ -80,26 +81,24 @@ const NewCardContainer = styled.divBox`
 
 const NewCardInput = styled.inputBox`
   border: none;
-  width: 75%;
-  font-size: 16px; /* Adjust the font size as needed */
-  min-height: 20px; /* Set a minimum height */
+  width: 76%;
+  font-size: 16px;
+  min-height: 20px;
   outline: none;
 `;
 
 export const NewCardSubmitButton = styled.buttonBox`
-  background-color: #4caf50; /* Green */
+  background-color: #4caf50;
   position: relative;
-  /* overflow: hidden; */
   color: white;
   padding: 0px 8px;
   border: none;
   border-radius: 5px;
-  /* vertical-align: top; */
   flex: auto;
   cursor: pointer;
   font-size: 24px;
   &:hover {
-    background-color: #226b26; /* Darker green on hover */
+    background-color: #226b26;
   }
 
   &:active {
@@ -110,7 +109,7 @@ export const NewCardSubmitButton = styled.buttonBox`
 `;
 
 export const CloseButton = styled.buttonBox`
-  background-color: #f44336; /* Red */
+  background-color: #f44336;
   color: white;
   padding: 2px 8px;
   border: none;
@@ -120,7 +119,7 @@ export const CloseButton = styled.buttonBox`
   font-size: 20px;
   margin-left: 4px;
   &:hover {
-    background-color: #d32f2f; /* Darker red on hover */
+    background-color: #d32f2f;
   }
 `;
 
@@ -139,11 +138,13 @@ const Column: React.FC<IColumn> = ({ data, index }) => {
   };
 
   const handleSubmitButtonClick = (columndId: DraggableId) => {
-    dispatch(createCard( {droppableId: columndId, title: inputValue} ));
+    dispatch(createCard({ droppableId: columndId, title: inputValue }));
     setCreateCardClicked(false);
   };
 
-  // const
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    e.key === "Enter" && handleSubmitButtonClick(data.draggableId);
+  };
 
   return (
     <Draggable
@@ -159,29 +160,35 @@ const Column: React.FC<IColumn> = ({ data, index }) => {
         >
           <Header>
             <Title>{data.title}</Title>
-            <AddCardButton
-              onClick={() => {
-                renderNewCard();
-              }}
-            >
-              Create a Card
-            </AddCardButton>
           </Header>
+
+          <CardList droppableId={data.draggableId} cards={data.cards} />
           {createCardClicked && (
             <NewCardContainer>
               <NewCardInput
+                autoFocus
                 onChange={(event: any) => {
                   handleInputChange(event);
                 }}
+                onKeyDown={handleKeyDown}
               ></NewCardInput>
-              <NewCardSubmitButton onClick={() => handleSubmitButtonClick(data.draggableId)}>+</NewCardSubmitButton>
+              <NewCardSubmitButton
+                onClick={() => handleSubmitButtonClick(data.draggableId)}
+              >
+                +
+              </NewCardSubmitButton>
               <CloseButton onClick={() => setCreateCardClicked(false)}>
                 X
               </CloseButton>
             </NewCardContainer>
           )}
-
-          <CardList droppableId={data.draggableId} cards={data.cards} />
+          <AddCardButton
+            onClick={() => {
+              renderNewCard();
+            }}
+          >
+            Create a Card
+          </AddCardButton>
         </Container>
       )}
     </Draggable>

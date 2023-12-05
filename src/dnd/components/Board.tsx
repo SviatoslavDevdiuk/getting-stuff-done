@@ -28,6 +28,7 @@ export default function Board() {
 
   useEffect(() => {
     dispatch(setCardsToColumns(cards));
+    console.log("cards have been updated");
   }, [cards]);
 
   useEffect(() => {}, [columns]);
