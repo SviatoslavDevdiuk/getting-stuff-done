@@ -3,7 +3,7 @@ import { mockCardData } from "../../dnd/mockData";
 import { ICardData } from "../../dnd/components/Card";
 import { RootState } from "../store";
 import { reorderBoard } from "../../dnd/reorder";
-import { setCardsToColumns, setColumns } from "./columnsSlice";
+import { setColumns } from "./columnsSlice";
 
 interface Cards {
   data: Array<ICardData>;
@@ -20,7 +20,6 @@ const initialState: Cards = {
 export const moveElement = createAsyncThunk(
   MOVE_CARD,
   async (payload: any, { getState, dispatch }) => {
-    console.log("move card payload: ", payload);
     const state = getState() as RootState;
 
     const { source, destination } = payload;
@@ -29,7 +28,6 @@ export const moveElement = createAsyncThunk(
       source,
       destination
     );
-    console.log("updated columns: ", reorderedColumns);
     dispatch(setColumns(reorderedColumns));
   }
 );
@@ -45,26 +43,41 @@ const cardSlice = createSlice({
   initialState,
   reducers: {
     createCard(state, action) {
-      const { droppableId, content: title } = action.payload;
+      const { droppableId, title } = action.payload;
 
-      console.log("create card is clicked");
-
-      const newCard: ICardData = { id: `card-${Date.now()}`, title: title, columnId: droppableId }
-     // it's not mutating state actually, the "immer" library is used under the hood
+      const newCard: ICardData = {
+        id: `card-${Date.now()}`,
+        title: title,
+        columnId: droppableId,
+      };
+      // it's not mutating state actually, the "immer" library is used under the hood
       state.data.push(newCard);
     },
-    // moveCard(state, action) {
-    //   console.log("moveCard: ", action.payload);
-    //   const { sourceIndex, destinationIndex } = action.payload;
-    //   const [removedCard] = state.data.splice(sourceIndex, 1);
-    //   state.data.splice(destinationIndex, 0, removedCard);
-    // },
+    editCard(state, action) {
+      const { title, id } = action.payload;
+      console.log("edit card: ", action.payload);
+      const targetCard = state.data.filter((card) => {
+        return card.id === id;
+      })[0];
+      console.log("target card: ", JSON.stringify(targetCard));
+      targetCard.title = title;
+    },
+    deleteCard(state, action) {
+      const { id } = action.payload;
+      console.log("id: ", id);
+      console.log(JSON.stringify(state.data));
+      const indexOfCardToRemove = state.data.findIndex((card) => {
+        return card.id === id;
+      });
+      console.log("index to remove: ", indexOfCardToRemove);
+      state.data.splice(indexOfCardToRemove, 1);
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(moveElement.fulfilled, (state, action) => {});
   },
 });
 
-export const { createCard } = cardSlice.actions;
+export const { createCard, editCard, deleteCard } = cardSlice.actions;
 
 export default cardSlice.reducer;

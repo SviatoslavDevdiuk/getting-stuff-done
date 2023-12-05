@@ -2,7 +2,7 @@
   "compilerOptions": {
     "jsx": "react",
     "include": [
-      "./src/**/*.ts"
+      "./src/**/*.ts", "src/custom.d.ts"
     ],
     /* Visit https://aka.ms/tsconfig to read more about this file */
 

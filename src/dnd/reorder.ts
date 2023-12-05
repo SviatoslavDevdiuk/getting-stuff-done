@@ -1,8 +1,8 @@
-import { IColumn } from "../redux/slices/columnsSlice";
 import { ICardData } from "./components/Card";
+import { IColumnData } from "./components/Column";
 
 export const reorder = (
-  list: IColumn,
+  list: IColumnData,
   startIndex: number,
   endIndex: number
 ) => {
@@ -14,11 +14,11 @@ export const reorder = (
 
 //for moving cards & columns
 export const reorderBoard = (
-  lists: Array<IColumn>,
+  lists: Array<IColumnData>,
   source: any,
   destination: any
 ) => {
-  const clonedLists: Array<IColumn> = structuredClone(lists);
+  const clonedLists: Array<IColumnData> = structuredClone(lists);
   const { droppableId: sourceDroppableId, index: sourceIndex } = source;
   const { droppableId: destDroppableId, index: destIndex } = destination;
 
@@ -29,7 +29,7 @@ export const reorderBoard = (
   if (sourceDroppableId === destDroppableId) {
     // Reordering within the same list
     if(sourceDroppableId === "board"){
-      const movedColumn: IColumn  = clonedLists.splice(sourceIndex, 1)[0];
+      const movedColumn: IColumnData  = clonedLists.splice(sourceIndex, 1)[0];
       clonedLists.splice(destIndex, 0, movedColumn);
       return clonedLists;
     }
@@ -50,6 +50,7 @@ export const reorderBoard = (
     const destList = clonedLists[destListIndex];
     const movedElement: ICardData = sourceList.cards.splice(sourceIndex, 1)[0];
     movedElement.columnId = destDroppableId;
+    console.log("card column ID: ", JSON.stringify(movedElement));
     destList.cards.splice(destIndex, 0, movedElement);
 
     return clonedLists;

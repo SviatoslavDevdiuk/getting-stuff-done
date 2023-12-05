@@ -19,7 +19,7 @@ export const mockCardData: Array<ICardData> = [
     content: "Enhance database query efficiency.",
     columnId: "1",
   },
-   {
+    {
      id: "card4",
      title: "Create API Guide",
      content: "Generate comprehensive API documentation.",
