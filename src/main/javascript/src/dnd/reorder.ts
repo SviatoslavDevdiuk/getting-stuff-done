@@ -21,7 +21,8 @@ export const reorderBoard = (
   const clonedLists: Array<IColumnData> = structuredClone(lists);
   const { droppableId: sourceDroppableId, index: sourceIndex } = source;
   const { droppableId: destDroppableId, index: destIndex } = destination;
-
+  console.log(clonedLists);
+  
   const sourceListIndex = clonedLists.findIndex(
     (column) => column.draggableId == sourceDroppableId
   );
@@ -56,3 +57,16 @@ export const reorderBoard = (
     return clonedLists;
   }
 };
+
+export const reorderCards =  (  cards: Array<ICardData>,
+  source: any,
+  destination: any
+) => {
+  const clonedCards: Array<ICardData> = structuredClone(cards);
+  const { droppableId: sourceDroppableId, index: sourceIndex } = source;
+  const { droppableId: destDroppableId, index: destIndex } = destination;
+
+//  const cardIndex = cards.find((card)=> {return card.})
+
+};
+

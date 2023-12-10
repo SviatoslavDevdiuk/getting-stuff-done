@@ -4,6 +4,7 @@ import { ICardData } from "../../dnd/components/Card";
 import { RootState } from "../store";
 import { reorderBoard } from "../../dnd/reorder";
 import { setColumns } from "./columnsSlice";
+import {createCardPost} from "../../service/CardService";
 
 interface Cards {
   data: Array<ICardData>;
@@ -50,6 +51,7 @@ const cardSlice = createSlice({
         title: title,
         columnId: droppableId,
       };
+      createCardPost(newCard);
       // it's not mutating state actually, the "immer" library is used under the hood
       state.data.push(newCard);
     },
