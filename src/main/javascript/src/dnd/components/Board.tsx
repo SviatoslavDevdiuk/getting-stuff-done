@@ -34,6 +34,7 @@ export default function Board() {
   useEffect(() => {}, [columns]);
 
   const handleDragEnd = (result: any) => {
+    console.log("result: ", result);
     const { source, destination } = result;
 
     if (!result.destination) {
