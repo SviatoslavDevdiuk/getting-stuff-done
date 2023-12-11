@@ -16,6 +16,6 @@ export const createCardPost = (data: ICardData) => {
     const options = requestOptions(jsonData);
 console.log("request: ", options)
     fetch('http://localhost:8080/card/create', options)
-        .then(response => response.json())
+        .then(response => console.log(response.json()))
         .then(data => console.log(data)).catch(error => console.log(error));
 }

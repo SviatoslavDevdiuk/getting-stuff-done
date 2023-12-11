@@ -1,26 +1,52 @@
 package com.example.gettingstuffdone.model;
 
+
+import javax.persistence.*;
+
+@Entity
 public class Card {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
+    public Long id;
 
-    public String id;
+    @Column
+    public String cardId;
+
+    @Column
     public String title;
+
+    @Column
     public String content;
+
+    @Column
     public String columnId;
 
-    public Card(String id, String title, String content, String columnId) {
-        this.id = id;
+    public Card() {
+    }
+
+    public Card(String cardId, String title, String content, String columnId) {
+        this.cardId = cardId;
         this.title = title;
         this.content = content;
         this.columnId = columnId;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
+    }
+
+    public void setCardId(String cardId) {
+        this.cardId = cardId;
+    }
+
+    public String getCardId() {
+        return this.cardId;
     }
 
     public String getTitle() {
@@ -47,5 +73,14 @@ public class Card {
         this.columnId = columnId;
     }
 
-
+    @Override
+    public String toString() {
+        return "Card{" +
+                "id=" + id +
+                ", cardId='" + cardId + '\'' +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", columnId='" + columnId + '\'' +
+                '}';
+    }
 }
