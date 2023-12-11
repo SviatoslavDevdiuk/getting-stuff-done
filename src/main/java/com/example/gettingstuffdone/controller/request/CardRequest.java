@@ -2,7 +2,6 @@ package com.example.gettingstuffdone.controller.request;
 
 public class CardRequest {
 
-
     public String id;
     public String title;
     public String content;
@@ -47,5 +46,13 @@ public class CardRequest {
         this.columnId = columnId;
     }
 
-
+    @Override
+    public String toString() {
+        return "CardRequest{" +
+                "id='" + id + '\'' +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", columnId='" + columnId + '\'' +
+                '}';
+    }
 }
