@@ -1,5 +1,5 @@
-import React, { RefObject, useState } from "react";
-import { Draggable, DraggableId } from "react-beautiful-dnd";
+import React, { useState } from "react";
+import { Draggable } from "react-beautiful-dnd";
 import styled from "@xstyled/styled-components";
 import { css } from "styled-components";
 import pencilButton from "../../svg/pencil-button.svg";

@@ -2,51 +2,50 @@ package com.example.gettingstuffdone.model;
 
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 public class Card {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
-    public Long id;
+    private Long id;
 
-    @Column
-    public String cardId;
+    private String cardNumber;
 
-    @Column
-    public String title;
+    private String title;
 
-    @Column
-    public String content;
+    private String content;
 
-    @Column
-    public String columnId;
+    private String columnNumber;
+
+    @ManyToOne
+    @JoinColumn(name = "column_id")
+    private Column column;
+
+
 
     public Card() {
     }
 
-    public Card(String cardId, String title, String content, String columnId) {
-        this.cardId = cardId;
+    public Card(String cardNumber, String title, String content, String columnNumber) {
+        this.cardNumber = cardNumber;
         this.title = title;
         this.content = content;
-        this.columnId = columnId;
+        this.columnNumber = columnNumber;
     }
 
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+
+    public String getCardNumber() {
+        return cardNumber;
     }
 
-    public void setCardId(String cardId) {
-        this.cardId = cardId;
-    }
-
-    public String getCardId() {
-        return this.cardId;
+    public void setCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber;
     }
 
     public String getTitle() {
@@ -65,22 +64,44 @@ public class Card {
         this.content = content;
     }
 
-    public String getColumnId() {
-        return columnId;
+    public String getColumnNumber() {
+        return columnNumber;
     }
 
-    public void setColumnId(String columnId) {
-        this.columnId = columnId;
+    public void setColumnNumber(String columnNumber) {
+        this.columnNumber = columnNumber;
+    }
+
+    public Column getColumn() {
+        return column;
+    }
+
+    public void setColumn(Column column) {
+        this.column = column;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Card card = (Card) o;
+        return Objects.equals(id, card.id) && Objects.equals(cardNumber, card.cardNumber) && Objects.equals(title, card.title) && Objects.equals(content, card.content) && Objects.equals(columnNumber, card.columnNumber) && Objects.equals(column, card.column);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, cardNumber, title, content, columnNumber, column);
     }
 
     @Override
     public String toString() {
         return "Card{" +
                 "id=" + id +
-                ", cardId='" + cardId + '\'' +
+                ", cardNumber='" + cardNumber + '\'' +
                 ", title='" + title + '\'' +
                 ", content='" + content + '\'' +
-                ", columnId='" + columnId + '\'' +
+                ", columnNumber='" + columnNumber + '\'' +
+                ", column=" + column +
                 '}';
     }
 }
