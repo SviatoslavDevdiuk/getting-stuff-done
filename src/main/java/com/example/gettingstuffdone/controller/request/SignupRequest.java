@@ -1,10 +1,11 @@
 package com.example.gettingstuffdone.controller.request;
 
-public class UserDTO {
+public class AuthenticationRequest {
 
     private String firstName;
     private String lastName;
     private String email;
+    private String password;
 
 
     public String getFirstName() {
@@ -31,12 +32,22 @@ public class UserDTO {
         this.email = email;
     }
 
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     @Override
     public String toString() {
-        return "UserDTO{" +
+        return "AuthenticationRequest{" +
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
                 '}';
     }
 }
